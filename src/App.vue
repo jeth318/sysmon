@@ -2,20 +2,26 @@
   <div v-if="staticData.system">
     <!--     <div class="vendor-logo-wrapper">
       <img src="./assets/pi_logo_rotating.gif" style="width: 50%" />
-    </div> -->
-    <v-container fluid>
+    </div>-->
+    <v-container wrap fluid>
       <v-row dense>
         <v-col :cols="12">
-          <cpu-graph-group
-            :temp="cpuData.temp"
-            :cpus="cpuData.cpus"
-          ></cpu-graph-group>
+          <cpu-graph-group :temp="cpuData.temp" :cpus="cpuData.cpus"></cpu-graph-group>
         </v-col>
-        <v-col :cols="6">
+      </v-row>
+      <v-row dense>
+        <v-col :cols="4">
           <sys-info :sysData="combinedSysData"></sys-info>
         </v-col>
-        <v-col :cols="6">
-          <memory-info dynamicMemData="" :staticMemData="staticData.memLayout"></memory-info>
+        <v-col :cols="8">
+          <v-row dense>
+            <v-col :cols="6">
+              <memory-info :memData="memData" :staticMemData="staticData.memLayout"></memory-info>
+            </v-col>
+            <v-col :cols="6">
+              <network-info :netData="netData"></network-info>   
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -35,15 +41,17 @@ const gradients = [
 import CpuGraphGroup from "./components/cpu-graph/cpu-graph-group.vue";
 import SysInfo from "./components/sys-info/sys-info.vue";
 import MemoryInfo from "./components/memory-info/memory-info.vue";
+import NetworkInfo from "./components/network-info/network-info.vue";
 
 export default {
   name: "App",
-  components: { CpuGraphGroup, SysInfo, MemoryInfo },
+  components: { CpuGraphGroup, SysInfo, MemoryInfo, NetworkInfo },
   data: () => ({
     io: null,
     isConnected: false,
     cpuData: {},
     sysData: {},
+    netData: {},
     staticData: {},
     width: 2,
     radius: 10,
@@ -62,7 +70,7 @@ export default {
       return {
         hardware: this.staticData.system,
         os: this.staticData.os
-      }
+      };
     }
   },
   sockets: {
@@ -82,6 +90,9 @@ export default {
     soc_mem_data(data) {
       this.memData = data;
     },
+    soc_net_data(data) {
+      this.netData = data;
+    },
     soc_static_data(data) {
       this.staticData = data;
     }
@@ -90,11 +101,18 @@ export default {
 </script>
 
 <style>
+
+html,
+body {
+  padding-left: 50px;
+  padding-right: 50px;
+}
 .card-header {
   background-color: orange !important;
   color: black;
+  padding: 4px !important;
+  font-weight: 600 !important;
 }
-
 .list-item-border-bottom {
   border-bottom: 1px solid grey;
 }

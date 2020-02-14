@@ -4,7 +4,6 @@
     <v-list-item class="list-item-border-bottom" two-line>
       <v-list-item-content>
         <v-card-subtitle>Hardware</v-card-subtitle>
-
         <span v-for="(entry, key) in hardwareList" :key="`${key}_static`">
           <v-list-item-title>{{ entry[0] }}</v-list-item-title>
           <v-list-item-subtitle>{{ entry[1] }}</v-list-item-subtitle>
