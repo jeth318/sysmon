@@ -10,6 +10,7 @@
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "core-js": "^3.6.4",
+    "digital-digit": "^1.1.0",
     "roboto-fontface": "*",
     "socket-io": "^1.0.0",
     "uws": "^10.148.1",

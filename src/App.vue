@@ -13,7 +13,7 @@
         <v-col :cols="4">
           <sys-info :sysData="combinedSysData"></sys-info>
         </v-col>
-        <v-col :cols="8">
+        <v-col :cols="8" style="padding-top: 0;">
           <v-row dense>
             <v-col :cols="6">
               <memory-info :memData="memData" :staticMemData="staticData.memLayout"></memory-info>
@@ -102,10 +102,15 @@ export default {
 
 <style>
 
+@font-face {
+  font-family: DS-Digital;
+  src: url(./assets/ds_digital/DS-DIGII.TTF);
+}
+
 html,
 body {
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .card-header {
   background-color: orange !important;

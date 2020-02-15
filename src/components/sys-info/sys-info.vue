@@ -3,23 +3,27 @@
     <v-card-title class="card-header">System Information</v-card-title>
     <v-list-item class="list-item-border-bottom" two-line>
       <v-list-item-content>
-        <v-card-subtitle>Hardware</v-card-subtitle>
         <span v-for="(entry, key) in hardwareList" :key="`${key}_static`">
           <v-list-item-title>{{ entry[0] }}</v-list-item-title>
           <v-list-item-subtitle>{{ entry[1] }}</v-list-item-subtitle>
         </span>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item class="list-item-border-bottom" two-line>
-      <v-list-item-content>
-        <v-card-subtitle>OS</v-card-subtitle>
-
-        <span v-for="(entry, key) in osList" :key="`${key}_static`">
-          <v-list-item-title>{{ entry[0] }}</v-list-item-title>
-          <v-list-item-subtitle>{{ entry[1] }}</v-list-item-subtitle>
-        </span>
-      </v-list-item-content>
-    </v-list-item>
+    <v-expansion-panels class="accordion" accordion padding="0">
+      <v-expansion-panel class="accordion">
+        <v-expansion-panel-header>OS Details</v-expansion-panel-header>
+        <v-expansion-panel-content class="no-padding">
+          <v-list-item class="list-item-border-bottom" two-line>
+            <v-list-item-content>
+              <span v-for="(entry, key) in osList" :key="`${key}_static`">
+                <v-list-item-title>{{ entry[0] }}</v-list-item-title>
+                <v-list-item-subtitle>{{ entry[1] }}</v-list-item-subtitle>
+              </span>
+            </v-list-item-content>
+          </v-list-item>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-card>
 </template>
 
@@ -79,5 +83,8 @@ export default {
 .card-header {
   background-color: orange !important;
   color: black;
+}
+.no-padding > div:first-of-type {
+  padding: 0 !important;
 }
 </style>
