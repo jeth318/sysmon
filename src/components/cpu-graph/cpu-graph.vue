@@ -1,13 +1,21 @@
 <template>
-<div :style="`width: 100%; height: ${getParentHeight()}px;`" :ref="`canvas-container_${id}`">
-  <canvas :id="`cpu_canvas_${id}`" :ref="`cpu_canvas_${id}`" ></canvas>
-</div>
+  <div :style="`width: 100%; height: ${getParentHeight()}px;`" :ref="`canvas-container_${id}`">
+    <canvas :id="`cpu_canvas_${id}`" :ref="`cpu_canvas_${id}`"></canvas>
+  </div>
 </template>
 
 <script>
-
 import { TimeSeries, SmoothieChart } from "../../utils/smoothie.js";
-const smoothieOptions = { grid: { strokeStyle:'#1e1e1e', fillStyle:'#1e1e1e', verticalSections: 0, millisPerLine: 0}, minValue: 0, maxValue: 100 };
+const smoothieOptions = {
+  grid: {
+    strokeStyle: "#1e1e1e",
+    fillStyle: "#1e1e1e",
+    verticalSections: 0,
+    millisPerLine: 0
+  },
+  minValue: 0,
+  maxValue: 100
+};
 
 export default {
   name: "cpu-graph",
@@ -26,8 +34,14 @@ export default {
   mounted() {
     this.smoothie = new SmoothieChart(smoothieOptions);
     this.dataStream = new TimeSeries();
-    this.smoothie.addTimeSeries(this.dataStream, { strokeStyle:'rgb(0, 255, 0)', lineWidth:3 });
-    this.smoothie.streamTo(document.getElementById(`cpu_canvas_${this.id}`), 1000);
+    this.smoothie.addTimeSeries(this.dataStream, {
+      strokeStyle: "rgb(0, 255, 0)",
+      lineWidth: 3
+    });
+    this.smoothie.streamTo(
+      document.getElementById(`cpu_canvas_${this.id}`),
+      1000
+    );
     this.setCanvasWidth();
   },
   methods: {
@@ -38,7 +52,7 @@ export default {
       canvas.height = canvasContainerElement.clientHeight;
     },
     getParentHeight() {
-      return this.id === 'main-cpu-graph' ? 120 : 50;
+      return this.id === "main-cpu-graph" ? 120 : 50;
     }
   },
   watch: {

@@ -1,13 +1,15 @@
 <template>
   <v-card dark>
     <v-card-title class="card-header">CPU</v-card-title>
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>Temp {{ temp.toFixed() }} C</v-list-item-title>
-        <v-list-item-title>Load {{ combinedCpus.load }} %</v-list-item-title>
-        <cpu-graph id="main-cpu-graph" :cpu="combinedCpus"></cpu-graph>
-      </v-list-item-content>
-    </v-list-item>
+    <div class="cpu-container">
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Temp {{ temp.toFixed() }} C</v-list-item-title>
+          <v-list-item-title>Load {{ combinedCpus.load }} %</v-list-item-title>
+          <cpu-graph id="main-cpu-graph" :cpu="combinedCpus"></cpu-graph>
+        </v-list-item-content>
+      </v-list-item>
+    </div>
     <v-expansion-panels popout class="accordion" accordion padding="0">
       <v-expansion-panel class="accordion">
         <v-expansion-panel-header>All CPUs</v-expansion-panel-header>
@@ -25,6 +27,7 @@
 
 <script>
 import CpuGraph from "./cpu-graph.vue";
+
 export default {
   name: "cpu-graph-group",
   components: { CpuGraph },
@@ -38,7 +41,6 @@ export default {
   watch: {
     cpus(cpus) {
       const allCpuTemperatures = cpus.map(cpu => cpu.load);
-
       this.combinedCpus = {
         load: (
           allCpuTemperatures.reduce((a, b) => a + b) / cpus.length
@@ -56,5 +58,13 @@ export default {
 
 .list-item-border-bottom {
   border-bottom: 1px solid grey;
+}
+
+.list-item-border-right {
+  border-right: 1px solid grey;
+}
+
+.cpu-container {
+
 }
 </style>
