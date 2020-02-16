@@ -6,11 +6,14 @@
     </div>
     <v-container wrap fluid>
       <v-row dense>
-        <v-col :cols="6">
+        <v-col :cols="4">
           <cpu-graph-group :processesData="processesData" :temp="cpuData.temp" :cpus="cpuData.cpus"></cpu-graph-group>
         </v-col>
-        <v-col :cols="6">
+        <v-col :cols="5">
           <processes-info :processesData="processesData"></processes-info>
+        </v-col>
+                <v-col :cols="3">
+         <services-info :servicesData="servicesData"></services-info>
         </v-col>
       </v-row>
       <v-row dense>
@@ -26,6 +29,11 @@
               <network-info :netData="netData"></network-info>
             </v-col>
           </v-row>
+          <v-row dense>
+            <v-col :cols="6">
+              
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -33,20 +41,12 @@
 </template>
 
 <script>
-const gradients = [
-  ["#222"],
-  ["#42b3f4"],
-  ["red", "orange", "yellow"],
-  ["purple", "violet"],
-  ["#00c6ff", "#F0F", "#FF0"],
-  ["#f72047", "#ffd200", "#1feaea"]
-];
-
 import CpuGraphGroup from "./components/cpu-graph/cpu-graph-group.vue";
 import SysInfo from "./components/sys-info/sys-info.vue";
 import MemoryInfo from "./components/memory-info/memory-info.vue";
 import NetworkInfo from "./components/network-info/network-info.vue";
 import ProcessesInfo from "./components/processes-info/processes-info.vue";
+import ServicesInfo from "./components/services-info/services-info.vue";
 
 export default {
   name: "App",
@@ -55,7 +55,8 @@ export default {
     ProcessesInfo,
     SysInfo,
     MemoryInfo,
-    NetworkInfo
+    NetworkInfo,
+    ServicesInfo
   },
   data: () => ({
     io: null,
@@ -65,17 +66,7 @@ export default {
     netData: {},
     staticData: {},
     processesData: {},
-    width: 2,
-    radius: 10,
-    padding: 8,
-    lineCap: "round",
-    gradient: gradients[5],
-    value: new Array(100).fill(10),
-    gradientDirection: "top",
-    gradients,
-    fill: false,
-    type: "trend",
-    autoLineWidth: false
+    servicesData: {}
   }),
   computed: {
     combinedSysData() {
@@ -110,6 +101,9 @@ export default {
     },
     soc_processes_data(data) {
       this.processesData = data;
+    },
+    soc_services_data(data) {
+      this.servicesData = data;
     }
   }
 };
@@ -129,6 +123,7 @@ body {
 
 .v-card {
   min-width: 150px !important;
+  height: 100%;
 }
 .card-header {
   background-color: orange !important;

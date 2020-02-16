@@ -3,6 +3,7 @@
     <v-card-title class="card-header">Processes</v-card-title>
     <v-data-table
       loading
+      dense
       :disable-pagination="true"
       :hide-default-footer="true"
       :headers="headers"
@@ -61,7 +62,7 @@ export default {
 }
 
 th {
-  text-align: left;
+  text-align: left !important;
 }
 
 .cpu-top-process-percentage {
