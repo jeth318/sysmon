@@ -7,7 +7,7 @@
         <v-list-item-subtitle>{{ netData.interface }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item class="list-item-border-bottom" two-line>
+    <v-list-item two-line>
       <v-list-item-content>
           <v-list-item-title class="speed-wrapper">
                 <img style="height: 20px; width: 20px;" src="../../assets/transfer-down.png" />

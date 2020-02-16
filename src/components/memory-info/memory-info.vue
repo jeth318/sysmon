@@ -17,7 +17,7 @@
         <v-list-item-subtitle>{{ memoryUsed}} MB</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item class="list-item-border-bottom" two-line>
+    <v-list-item v-if="staticMemData.length >= 1" two-line>
       <v-list-item-content class="ram-bank" v-for="(entry, key) in staticMemData" :key="key">
         <v-list-item-title>Capacity</v-list-item-title>
         <v-list-item-subtitle>{{ entry.size / 1024 / 1024 }} MB</v-list-item-subtitle>
@@ -27,6 +27,13 @@
         <v-list-item-subtitle>{{ entry.manufacturer }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
+    <v-list-item v-else two-line>
+      <v-list-item-content>
+        <v-list-item-title>N/A</v-list-item-title>
+        <v-list-item-subtitle>Bank info not available</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+  
   </v-card>
 </template>
 
@@ -41,7 +48,9 @@ export default {
   computed: {
     totalCapacity() {
       const allMemoryBanks = this.staticMemData.map(bank => bank.size);
-      return allMemoryBanks.reduce((a, b) => a + b) / 1024 / 1024 / 1024;
+      return !allMemoryBanks.length
+        ? (this.memData.total / 1024 / 1024 / 1024).toFixed(0)
+        : allMemoryBanks.reduce((a, b) => a + b) / 1024 / 1024 / 1024;
     },
     memoryUsed() {
       return Math.round(
