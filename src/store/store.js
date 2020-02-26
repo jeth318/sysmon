@@ -10,14 +10,13 @@ export default new Vuex.Store({
   mutations: {
     SOCKET_stats() {
       // do something
-      console.log('Mutation');
-      
+      console.log("Mutation");
     }
   },
   actions: {
     SOCKET_stats() {
-        console.log('Action');
-        
+      console.log("Action");
+
       // do something
     }
   }

@@ -1,25 +1,37 @@
 <template>
   <div v-if="staticData.system">
-    <!--     <div class="vendor-logo-wrapper">
-      <img src="./assets/pi_logo_rotating.gif" style="width: 50%" />
-    </div>-->
+    <div class="vendor-logo-wrapper">
+      <img src="./assets/pi_logo_rotating.gif" style="width: 20%" />
+      <div class="page-heading">RASPI-SYSMON</div>
+    </div>
     <v-container wrap fluid>
       <v-row dense>
-        <v-col :cols="12">
-          <cpu-graph-group :temp="cpuData.temp" :cpus="cpuData.cpus"></cpu-graph-group>
+        <v-col :cols="4">
+          <cpu-graph-group :processesData="processesData" :temp="cpuData.temp" :cpus="cpuData.cpus"></cpu-graph-group>
+        </v-col>
+        <v-col :cols="5">
+          <processes-info :processesData="processesData"></processes-info>
+        </v-col>
+                <v-col :cols="3">
+         <services-info :servicesData="servicesData"></services-info>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col :cols="4">
           <sys-info :sysData="combinedSysData"></sys-info>
         </v-col>
-        <v-col :cols="8">
+        <v-col :cols="8" style="padding-top: 0;">
           <v-row dense>
             <v-col :cols="6">
               <memory-info :memData="memData" :staticMemData="staticData.memLayout"></memory-info>
             </v-col>
             <v-col :cols="6">
-              <network-info :netData="netData"></network-info>   
+              <network-info :netData="netData"></network-info>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col :cols="6">
+              
             </v-col>
           </v-row>
         </v-col>
@@ -29,23 +41,23 @@
 </template>
 
 <script>
-const gradients = [
-  ["#222"],
-  ["#42b3f4"],
-  ["red", "orange", "yellow"],
-  ["purple", "violet"],
-  ["#00c6ff", "#F0F", "#FF0"],
-  ["#f72047", "#ffd200", "#1feaea"]
-];
-
 import CpuGraphGroup from "./components/cpu-graph/cpu-graph-group.vue";
 import SysInfo from "./components/sys-info/sys-info.vue";
 import MemoryInfo from "./components/memory-info/memory-info.vue";
 import NetworkInfo from "./components/network-info/network-info.vue";
+import ProcessesInfo from "./components/processes-info/processes-info.vue";
+import ServicesInfo from "./components/services-info/services-info.vue";
 
 export default {
   name: "App",
-  components: { CpuGraphGroup, SysInfo, MemoryInfo, NetworkInfo },
+  components: {
+    CpuGraphGroup,
+    ProcessesInfo,
+    SysInfo,
+    MemoryInfo,
+    NetworkInfo,
+    ServicesInfo
+  },
   data: () => ({
     io: null,
     isConnected: false,
@@ -53,17 +65,8 @@ export default {
     sysData: {},
     netData: {},
     staticData: {},
-    width: 2,
-    radius: 10,
-    padding: 8,
-    lineCap: "round",
-    gradient: gradients[5],
-    value: new Array(100).fill(10),
-    gradientDirection: "top",
-    gradients,
-    fill: false,
-    type: "trend",
-    autoLineWidth: false
+    processesData: {},
+    servicesData: {}
   }),
   computed: {
     combinedSysData() {
@@ -95,17 +98,32 @@ export default {
     },
     soc_static_data(data) {
       this.staticData = data;
+    },
+    soc_processes_data(data) {
+      this.processesData = data;
+    },
+    soc_services_data(data) {
+      this.servicesData = data;
     }
   }
 };
 </script>
 
 <style>
+@font-face {
+  font-family: DS-Digital;
+  src: url(./assets/ds_digital/DS-DIGII.TTF);
+}
 
 html,
 body {
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.v-card {
+  min-width: 150px !important;
+  height: 100%;
 }
 .card-header {
   background-color: orange !important;
@@ -128,7 +146,10 @@ html {
 
 .vendor-logo-wrapper {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 30px;
+  color: white;
   width: 50%;
 }
 </style>

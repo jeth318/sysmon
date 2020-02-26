@@ -1,58 +1,64 @@
 <template>
-  <v-sparkline
-    :value="value"
-    :height="30"
-    :gradient="gradient"
-    :smooth="radius || false"
-    :padding="padding"
-    :line-width="width"
-    :stroke-linecap="lineCap"
-    :gradient-direction="gradientDirection"
-    :fill="fill"
-    :type="type"
-    :auto-line-width="autoLineWidth"
-    :auto-draw="false"
-  ></v-sparkline>
+  <div :style="`width: 100%; height: ${getParentHeight()}px;`" :ref="`canvas-container_${id}`">
+    <canvas :id="`cpu_canvas_${id}`" :ref="`cpu_canvas_${id}`"></canvas>
+  </div>
 </template>
 
 <script>
-const gradients = [
-  ["#222"],
-  ["#42b3f4"],
-  ["red", "orange", "yellow"],
-  ["purple", "violet"],
-  ["#00c6ff", "#F0F", "#FF0"],
-  ["#f72047", "#ffd200", "#1feaea"]
-];
+import { TimeSeries, SmoothieChart } from "../../utils/smoothie.js";
+const smoothieOptions = {
+  grid: {
+    strokeStyle: "#1e1e1e",
+    fillStyle: "#1e1e1e",
+    verticalSections: 0,
+    millisPerLine: 0
+  },
+  minValue: 0,
+  maxValue: 100
+};
 
 export default {
   name: "cpu-graph",
   props: {
     cpu: { type: Object, default: () => {} },
-    id: { type: Number, required: true }
+    id: { type: String, required: true }
   },
   data: () => ({
     io: null,
-    statsData: [],
-    width: 1,
-    radius: 10,
-    padding: 0,
-    lineCap: "round",
-    gradient: gradients[5],
-    value: new Array(100).fill(10),
-    gradientDirection: "top",
-    gradients,
-    fill: false,
-    type: "trend",
-    autoLineWidth: false
+    smoothie: null,
+    dataStream: null
   }),
+  created() {
+    window.addEventListener("resize", this.setCanvasWidth);
+  },
+  mounted() {
+    this.smoothie = new SmoothieChart(smoothieOptions);
+    this.dataStream = new TimeSeries();
+    this.smoothie.addTimeSeries(this.dataStream, {
+      strokeStyle: "rgb(0, 255, 0)",
+      lineWidth: 3
+    });
+    this.smoothie.streamTo(
+      document.getElementById(`cpu_canvas_${this.id}`),
+      1000
+    );
+    this.setCanvasWidth();
+  },
+  methods: {
+    setCanvasWidth() {
+      const canvasContainerElement = this.$refs[`canvas-container_${this.id}`];
+      const canvas = this.$refs[`cpu_canvas_${this.id}`];
+      canvas.width = canvasContainerElement.clientWidth;
+      canvas.height = canvasContainerElement.clientHeight;
+    },
+    getParentHeight() {
+      return this.id === "main-cpu-graph" ? 120 : 50;
+    }
+  },
   watch: {
     cpu(cpu) {
-      const oldRemoved = this.value.slice(1, this.value.length);
-      this.value = [...oldRemoved, cpu.load];
+      this.dataStream.append(new Date().getTime(), cpu.load);
     }
   }
 };
 </script>
-
-<style></style>
